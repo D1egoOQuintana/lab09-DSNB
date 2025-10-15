@@ -14,8 +14,8 @@ class S3Service {
       Bucket: bucketName,
       Key: fileName,
       Body: file.buffer,
-      ContentType: file.mimetype,
-      ACL: 'public-read' // Para que las imágenes sean accesibles públicamente
+      ContentType: file.mimetype
+      // ACL removido - usar Bucket Policy en su lugar
     };
 
     try {
@@ -78,8 +78,8 @@ class S3Service {
     const params = {
       Bucket: destinationBucket,
       CopySource: `${sourceBucket}/${sourceKey}`,
-      Key: sourceKey,
-      ACL: 'public-read'
+      Key: sourceKey
+      // ACL removido - usar Bucket Policy en su lugar
     };
 
     try {
