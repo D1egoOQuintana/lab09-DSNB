@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Productos - AWS S3</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>📦 Gestor de Productos</h1>
+      <p>Sistema de gestión con almacenamiento en AWS S3</p>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-button active" onclick="showTab('products')">Productos</button>
+      <button class="tab-button" onclick="showTab('backup')">Backup & Restore</button>
+    </div>
+
+    <!-- Tab: Productos -->
+    <div id="products-tab" class="tab-content active">
+      <!-- Formulario de Producto -->
+      <div class="card">
+        <h2>➕ Agregar/Editar Producto</h2>
+        <form id="product-form" enctype="multipart/form-data">
+          <input type="hidden" id="product-id">
+          
+          <div class="form-group">
+            <label for="name">Nombre *</label>
+            <input type="text" id="name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea id="description" rows="3"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="price">Precio *</label>
+            <input type="number" id="price" step="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label for="image">Imagen</label>
+            <input type="file" id="image" accept="image/*">
+            <small>Formatos: JPG, PNG, GIF, WEBP (máx. 5MB)</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">💾 Guardar</button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Limpiar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Lista de Productos -->
+      <div class="card">
+        <h2>📋 Lista de Productos</h2>
+        <div id="products-list" class="products-grid">
+          <!-- Los productos se cargarán aquí -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Backup & Restore -->
+    <div id="backup-tab" class="tab-content">
+      <div class="card">
+        <h2>🔐 Configuración de Buckets</h2>
+        <div id="bucket-config" class="bucket-info">
+          <!-- Configuración se cargará aquí -->
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>💾 Backup del Bucket Principal</h2>
+        <p>Copia todos los archivos del bucket principal al bucket de backup.</p>
+        <button class="btn btn-primary" onclick="performBackup()">
+          🔄 Hacer Backup
+        </button>
+        <div id="backup-result" class="result-box"></div>
+      </div>
+
+      <div class="card">
+        <h2>♻️ Restaurar desde Backup</h2>
+        <p>Restaura los archivos desde un bucket de backup al bucket principal.</p>
+        
+        <div class="form-group">
+          <label for="restore-bucket">Bucket de Origen (opcional)</label>
+          <input type="text" id="restore-bucket" placeholder="Dejar vacío para usar bucket de backup por defecto">
+        </div>
+
+        <button class="btn btn-warning" onclick="performRestore()">
+          ⚡ Restaurar
+        </button>
+        <div id="restore-result" class="result-box"></div>
+      </div>
+
+      <div class="card">
+        <h2>📁 Archivos en S3</h2>
+        <div class="bucket-tabs">
+          <button class="btn btn-secondary" onclick="listBucketFiles('main')">Ver Bucket Principal</button>
+          <button class="btn btn-secondary" onclick="listBucketFiles('backup')">Ver Bucket Backup</button>
+        </div>
+        <div id="files-list" class="files-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
